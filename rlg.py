@@ -70,7 +70,6 @@ def parse_bot_commands(slack_events):
         if event["type"] == "message" and not "subtype" in event:
             user_id, message = parse_direct_mention(event["text"])
             if user_id == rlgbot_id:
-                print event["user"]
                 return message, event["channel"], event["user"]
     return None, None, None
 
