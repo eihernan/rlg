@@ -191,8 +191,14 @@ def handle_command(command, channel, user):
 
         rest_dict, rest_list = load_restaurants(rest_file)
         response += random.choice(rest_list)
-
-
+        
+        
+    elif command.starswith('ravioli')
+        response = "The Krabby Patty formula can be found at: "
+        
+        rest_dict, rest_list = load_restaurants(rest_file)
+        response += random.choice(rest_list)
+       
     # send response
     slack_client.api_call(
         "chat.postMessage",
