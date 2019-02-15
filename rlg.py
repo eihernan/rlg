@@ -190,7 +190,11 @@ def handle_command(command, channel, user):
         response = "Here is a random restaurant selection: "
 
         rest_dict, rest_list = load_restaurants(rest_file)
-        response += random.choice(rest_list)
+        rest=random.choice(rest_list)
+        while rest=="dunkin' donuts":
+            response="Josh will be going to dunkin' donuts. Here is a different random restaurant selection: "
+            rest=random.choice(rest_list)
+        response += rest
         
         
     elif command.startswith('ravioli'):
