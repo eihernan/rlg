@@ -32,7 +32,7 @@ def load_restaurants(rest_file_name):
         for line in infile.readlines():
             if line=="\n":      # skip empty lines
                 continue
-            elif line[-2]==':':   # indicates the begining of a user's list
+            elif line[-2]==':' and ':' not in line[:-2]:   # indicates the begining of a user's list
                 user=line.split(':')[0]
                 rest_dict[user]=[]
             else:               # append restaurant to user's list
@@ -58,6 +58,7 @@ def write_restaurants(rest_dict, rest_file_name):
 
 # random seed for restaurant selection
 random.seed()
+
 
 
 def parse_bot_commands(slack_events):
@@ -89,10 +90,24 @@ def handle_command(command, channel, user):
         Executes bot command if the command is known
     """
     # default response is help text for the user
-    default_response = "Not sure what you mean. Try *add* or *where*."
+    default_response = "Not sure what you mean. Try *add*, *where*, or *list*."
     response = None
 
     command=command.lower() # case-insensitive
+
+
+    # list restaurants on a user's list
+    if command.startswith('list'):
+        # load current lists
+        rest_dict, rest_list = load_restaurants(rest_file)
+       
+        if user not in rest_dict:
+            response = "It looks like your list is empty. You can ask me to add restaurants to the list by typing something like\n\t\"add restaurant1, restaurant2\"" 
+
+        else:
+            response = "Your list contains the following restaurants:"
+            for rest in rest_dict[user]:
+                response+="\n\t"+rest
 
 
     # add a restaurant to a user's list 
