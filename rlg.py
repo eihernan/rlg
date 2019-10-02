@@ -149,9 +149,12 @@ def handle_command(command, channel, user):
 
     # delete a restaurant from a user's list
     if command.startswith('del'):
-        #handle apostrophes
+        #handle apostrophes        
+        
         #replace a right apostrophe unicode 2019 with a single apostrophe unicode 0027 to match stored format
-        command=command.decode("utf-8").replace(u"\u2019", u"\u0027").encode("utf-8")
+        #command=command.decode("utf-8").replace(u"\u2019", u"\u0027").encode("utf-8") #calls ascii instead of utf-8 for unknown reason
+        
+        command=command.replace("\xe2\x80\x99","'") #ascii code for right apostrophe is \xe2\x80\x99, ' is ascii compliant
         to_del=command.split('del ')
 
         if len(to_del)<2:
