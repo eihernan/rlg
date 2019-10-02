@@ -157,6 +157,8 @@ def handle_command(command, channel, user):
         else:
             to_del=to_del[1].split(', ')
             removed=[]
+            
+            to_del=to_del.replace("’", "'") #replace a right apostrophe unicode 2019 with a single apostrophe unicode 0027 to match stored format
 
             # load current lists
             rest_dict, rest_list = load_restaurants(rest_file)
