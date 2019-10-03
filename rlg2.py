@@ -149,9 +149,6 @@ def handle_command(command, channel, user):
 
     # delete a restaurant from a user's list
     if command.startswith('del'):
-        #handle apostrophes
-        #replace a right apostrophe unicode 2019 with a single apostrophe unicode 0027 to match stored format
-        command=command.decode("utf-8").replace(u"\u2019", u"\u0027").encode("utf-8")
         to_del=command.split('del ')
 
         if len(to_del)<2:
