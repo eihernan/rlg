@@ -1,3 +1,4 @@
+import random
 import re
 
 def load_restaurants(rest_file_name):

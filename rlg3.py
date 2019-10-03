@@ -1,11 +1,12 @@
 import os
 from slack import RTMClient
-import random
 from rlg_util import *
 
 # file containing list of restaurants
 rest_file='restaurant_list'
 
+# random seed for restaurant selection
+random.seed()
 
 @RTMClient.run_on(event="message")
 
