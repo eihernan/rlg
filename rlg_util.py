@@ -66,7 +66,7 @@ def handle_command(command, user, rest_file):
         rest_dict, rest_list = load_restaurants(rest_file)
 
         if user not in rest_dict:
-            response = "It looks like your list is empty. You can ask me to add restaurants to the list by typing something like\n\t\"add restaurant1, restaurant2\""
+            response = "It looks like your list is empty. You can ask me to add restaurants to your list by typing something like\n\t\"add restaurant1, restaurant2\""
 
         else:
             response = "Your list contains the following restaurants:"
@@ -78,7 +78,7 @@ def handle_command(command, user, rest_file):
         to_add=command.split('add ')
 
         if len(to_add)<2:
-            response="You can ask me to add restaurants to the list by typing something like\n\t\"add restaurant1, restaurant2\""
+            response="You can ask me to add restaurants to your list by typing something like\n\t\"add restaurant1, restaurant2\""
 
         else:
             to_add=to_add[1].split(', ')
@@ -89,32 +89,44 @@ def handle_command(command, user, rest_file):
                 rest_dict[user]=[]
 
             # add the restaurants to user's list
+            added=[]
             for r in to_add:
-                rest_dict[user].append(r)
-                rest_list.append(r)
+                if r in rest_dict[user]:
+                    if response==default_response:
+                        response="Hmmm, %s is already on your list!"%(r)
+                    else:
+                        response+="\nHmmm, %s is already on your list!"%(r)
+                else:
+                    rest_dict[user].append(r)
+                    rest_list.append(r)
+                    added.append(r)
             # save modified lists
             write_restaurants(rest_dict, rest_file)
 
-            # build response message
-            response = "Sure... I added "
+            if added!=[]:
+                # build response message
+                if response==default_response:
+                    response = "Sure... I added "
+                else:
+                    response += "\nBut I added "
 
-            if len(to_add)==1:
-                response+=to_add[0]
-            elif len(to_add)==2:
-                response+=to_add[0]+' and '+to_add[1]
-            else:
-                for r in to_add[:-1]:
-                    response += r+', '
-                response += 'and '+to_add[-1]
+                if len(added)==1:
+                    response+=added[0]
+                elif len(added)==2:
+                    response+=added[0]+' and '+added[1]
+                else:
+                    for r in added[:-1]:
+                        response += r+', '
+                    response += 'and '+added[-1]
 
-            response += " to the list of restaurants!\nIf there were any mistakes, you can delete them from the list by typing\n\t\"del restaurant1, restaurant2\""
+                response += " to your list of restaurants!\nIf there were any mistakes, you can delete them from your list by typing\n\t\"del restaurant1, restaurant2\""
 
     # delete a restaurant from a user's list
     if command.startswith('del'):
         to_del=command.split('del ')
 
         if len(to_del)<2:
-            response="You can ask me to delete restaurants from the list by typing something like\n\t\"del restaurant1 restaurant2\""
+            response="You can ask me to delete restaurants from your list by typing something like\n\t\"del restaurant1 restaurant2\""
 
         else:
             to_del=to_del[1].split(', ')
@@ -146,7 +158,7 @@ def handle_command(command, user, rest_file):
                         response += r+', '
                     response += 'and '+removed[-1]
 
-                response += " from the list of restaurants!"
+                response += " from your list of restaurants!"
 
             if len(to_del)>0:
                 if response==default_response:
@@ -159,7 +171,7 @@ def handle_command(command, user, rest_file):
                     for r in to_del[:-1]:
                         response += r+', '
                     response += 'and '+to_del[-1]+' were'
-                response += " not in the list."
+                response += " not in your list."
 
     # choose a random restaurant
     elif command.startswith('where'):
