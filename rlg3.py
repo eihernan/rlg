@@ -29,6 +29,24 @@ def say_hello(**payload):
 #      thread_ts=thread_ts
     )
 
+@RTMClient.run_on(event="reaction_added")
+
+def democracy_is_freedom(**payload):
+  data = payload['data']
+  web_client = payload['web_client']
+  
+  item_user = data['item_user'] #who posted the message that received a reaction
+  if item_user == rlgbot_id:
+    channel_id = data['item']['channel']
+    user = data['user']
+    reaction = data['reaction']
+    response=handle_reaction(reaction, user, reset_file)
+    
+    web_client.chat_postMessage(
+      channel=channel_id,
+      text=response
+    )
+    
 with open('slack_token','r') as pwd:
     slack_token=pwd.readline().strip()
 with open('bot_id', 'r') as uid:
