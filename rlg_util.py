@@ -195,3 +195,15 @@ def handle_command(command, user, rest_file):
         response += random.choice(rest_list)
 
     return response
+
+def handle_reaction(reaction, user, rest_file):
+    #if user == Josh:
+    #    response = "Josh is a tyrant, and tyrants have no say in our democracy."
+    if reaction.startswith(':thumbsdown:'): #make elif when josh filter applied
+	    response = "VETOED BECAUSE WE LIVE IN THE LAND OF THE FREE! :fireworks::flag-us::fireworks: How about trying something else:“
+	    rest_dict, rest_list = load_restaurants(rest_file)
+	    rest = random.choice(rest_list)
+        response += rest
+    else:
+        return False
+    return response
