@@ -13,8 +13,8 @@ def say_hello(**payload):
   data = payload['data']
   web_client = payload['web_client']
 
-  print()
-  print(data)
+#  print()
+#  print(data)
 
   # check for direct message
   user_id, message = parse_direct_mention(data['text'])
@@ -34,26 +34,26 @@ def say_hello(**payload):
   # if bot's suggestion, save data
   if 'username' in data:
     if data['username']=='Random Lunch Generator':
-      print("received bot message event")
-      print(data["text"])
+#      print("received bot message event")
+#      print(data["text"])
       if "random restaurant" in data["text"] or "formula" in data["text"] or "VETOED" in data["text"]:
         with open("last_suggestions", 'w') as log:
           log.write(data["event_ts"]+'\n')
 
 @RTMClient.run_on(event="reaction_added")
 def react(**payload):
-  print()
-  print("received reaction added event")
+#  print()
+#  print("received reaction added event")
   data = payload['data']
   web_client = payload['web_client']
   channel_id=data['item']['channel']
 
-  print(payload)
+#  print(payload)
 
   # check that reaction is to the lunch bot's last suggestion
   with open("last_suggestions", 'r') as log:
     suggested_time=log.readline().strip()
-    print(suggested_time)
+#    print(suggested_time)
  
   if data['item']['ts']==suggested_time:
     response=handle_reaction(data["reaction"], data["user"], rest_file)
