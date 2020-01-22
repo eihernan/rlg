@@ -39,6 +39,9 @@ def parse_direct_mention(message_text):
         Finds a direct mention (a mention that is at the beginning) in message text
         and returns the user ID which was mentioned. If there is no direct mention, returns None
     """
+    if type(message_text)!=str:
+        return (None, None)
+
     MENTION_REGEX = "^<@(|[WU].+?)>(.*)"
     matches = re.search(MENTION_REGEX, message_text)
     # the first group contains the username, the second group contains the remaining message

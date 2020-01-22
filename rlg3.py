@@ -9,12 +9,14 @@ rest_file='restaurant_list'
 random.seed()
 
 @RTMClient.run_on(event="message")
-def say_hello(**payload):
+def respond(**payload):
+
+  # save last event for debugging in case of crash
+  with open("log",'w') as log:
+    log.write(str(payload)+'\n')
+
   data = payload['data']
   web_client = payload['web_client']
-
-#  print()
-#  print(data)
 
   # check for direct message
   user_id, message = parse_direct_mention(data['text'])
@@ -42,13 +44,14 @@ def say_hello(**payload):
 
 @RTMClient.run_on(event="reaction_added")
 def react(**payload):
-#  print()
-#  print("received reaction added event")
+
+  # save last event for debugging in case of crash
+  with open("log",'w') as log:
+    log.write(str(payload)+'\n')
+
   data = payload['data']
   web_client = payload['web_client']
   channel_id=data['item']['channel']
-
-#  print(payload)
 
   # check that reaction is to the lunch bot's last suggestion
   with open("last_suggestions", 'r') as log:
