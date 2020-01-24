@@ -179,20 +179,20 @@ def handle_command(command, user, rest_file):
     # choose a random restaurant
     elif command.startswith('where'):
         response = "Here is a random restaurant selection: "
-
+        if command.count('baby')>=1:
+            response = "Tell my baby to eat at: "
+        if command.count('ravioli')>=1:
+            response = "The Krabby Patty formula can be found at: "
         rest_dict, rest_list = load_restaurants(rest_file)
         rest=random.choice(rest_list)
-        while rest=="dunkin' donuts" or rest==":coffee::doughnut:":
+        
+        if rest=="dunkin' donuts" or rest==":coffee::doughnut:":
             if rest=="dunkin' donuts":
-                response="Josh will be going to "+rest+". Here is a different random restaurant selection: "
+                response="Josh is at "+rest+". " + response
             else:
-                response="Erick will be going to "+rest+". Here is a different random restaurant selection: "
+                response="Erick will be going to "+rest+ ". " + response
             rest=random.choice(rest_list)
         response += rest
-
-
-    elif command.startswith('ravioli'):
-        response = "The Krabby Patty formula can be found at: "
 
         rest_dict, rest_list = load_restaurants(rest_file)
         response += random.choice(rest_list)
