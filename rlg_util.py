@@ -186,11 +186,11 @@ def handle_command(command, user, rest_file):
         rest_dict, rest_list = load_restaurants(rest_file)
         rest=random.choice(rest_list)
         
-        if rest=="dunkin' donuts" or rest==":coffee::doughnut:":
+        while rest=="dunkin' donuts" or rest==":coffee::doughnut:":
             if rest=="dunkin' donuts":
-                response="Josh is at "+rest+". " + response
+                response="Josh is at "+rest+". " + "Here is another random restaurant selection: "
             else:
-                response="Erick will be going to "+rest+ ". " + response
+                response="Erick will be going to "+rest+ ". " + "Here is another random restaurant selection: "
             rest=random.choice(rest_list)
         response += rest
 
