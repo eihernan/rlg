@@ -194,9 +194,6 @@ def handle_command(command, user, rest_file):
             rest=random.choice(rest_list)
         response += rest
 
-        rest_dict, rest_list = load_restaurants(rest_file)
-        response += random.choice(rest_list)
-
     return response
 
 def handle_reaction(reaction, user, rest_file):
