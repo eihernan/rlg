@@ -53,7 +53,7 @@ def handle_command(command, user, rest_file):
     """
 
     # default response is help text for the user
-    default_response = "Not sure what you mean. Try *add*, *where*, or *list*."
+    default_response = "Not sure what you mean. Try *add*, *where*, *where is*, or *list*."
     response=default_response
 
      # case-insensitive
@@ -77,7 +77,7 @@ def handle_command(command, user, rest_file):
                 response+="\n\t"+rest
 
     # add a restaurant to a user's list 
-    if command.startswith('add'):
+    elif command.startswith('add'):
         to_add=command.split('add ')
 
         if len(to_add)<2:
@@ -125,7 +125,7 @@ def handle_command(command, user, rest_file):
                 response += " to your list of restaurants!\nIf there were any mistakes, you can delete them from your list by typing\n\t\"del restaurant1, restaurant2\""
 
     # delete a restaurant from a user's list
-    if command.startswith('del'):
+    elif command.startswith('del'):
         to_del=command.split('del ')
 
         if len(to_del)<2:
@@ -176,8 +176,20 @@ def handle_command(command, user, rest_file):
                     response += 'and '+to_del[-1]+' were'
                 response += " not in your list."
 
+    # give a restaurant address
+    elif command.startswith('where is'):
+        destination = command.split('where is ')[-1]
+        destination = destination.strip().replace(' ','+')
+        if destination[-1]=='?':#not really needed, link seems to still work
+              destination = destination[:-2]
+        #see https://developers.google.com/maps/documentation/urls/guide
+        #maps_url = f'https://www.google.com/maps/dir/Materials+Science+and+Engineering+Building,+1304+W+Green+St,+Urbana,+IL+61801/{destination}'
+        #starts from MSEB, always.
+        #maps_url = f'https://www.google.com/maps/dir/?api=1&origin=Materials+Science+and+Engineering+Building,+1304+W+Green+St,+Urbana,+IL+61801&destination={destination}&travelmode=walking'
+        maps_url = f'https://www.google.com/maps/dir/?api=1&destination={destination}&travelmode=walking'                                          
+        response = 'Try these directions to find it: \n'+maps_url
     # choose a random restaurant
-    elif command.startswith('where'):
+    elif command.count('where')>=1:
         response = "Here is a random restaurant selection: "
         if command.count('baby')>=1:
             response = "Tell my baby to eat at: "
@@ -193,19 +205,26 @@ def handle_command(command, user, rest_file):
                 response="Erick will be going to "+rest+ ". " + "Here is another random restaurant selection: "
             rest=random.choice(rest_list)
         response += rest
+    
 
     return response
+
+
 
 def handle_reaction(reaction, user, rest_file):
     #if user == Josh:
     #    response = "Josh is a tyrant, and tyrants have no say in our democracy."
 
     response=None
-
+    
     if reaction=='-1': #make elif when josh filter applied
-        response = "VETOED BECAUSE WE LIVE IN THE LAND OF THE FREE! :fireworks::flag-us::fireworks: How about trying something else:"
+        options = ["VETOED BECAUSE WE LIVE IN THE LAND OF THE FREE! :fireworks::flag-us::fireworks: How about trying something else:"\
+                   ,"That option doesn't seem to be too popular, how about this:",\
+                   "My baby doesn't want to eat there. Does baby want to go to:"]
+        response = random.choice(options)
         rest_dict, rest_list = load_restaurants(rest_file)
         rest = random.choice(rest_list)
         response += rest
-
+    #if reaction in ['man-running','woman-running','world-map']:
+        #need last suggestion to create a maps link; won't work with emoji restuarants unless a word form is produced."
     return response
